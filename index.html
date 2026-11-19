@@ -13,6 +13,10 @@
   }
   .wrap { width: 100%; max-width: 720px; }
   h1 { font-size: 20px; margin: 0 0 18px; text-align: center; }
+  .topbtns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .topbtns button { flex: none; }
+  #download { background: linear-gradient(135deg, #3b82f6, #6ee7f7); border: none; color: #0f1117; }
+  #openbb { background: #1e293b; border: 1px solid #334155; color: #94a3b8; }
   textarea {
     width: 100%; height: 200px; background: #1e293b; border: 1px solid #334155;
     border-radius: 8px; color: #e2e8f0; padding: 12px 14px; resize: vertical;
@@ -62,6 +66,11 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="topbtns">
+    <button type="button" id="download">Download Model</button>
+    <button type="button" id="openbb">Open Blockbench</button>
+  </div>
+
   <h1>Blockbench to Bloxd Animation Converter</h1>
 
   <textarea id="input"></textarea>
@@ -111,6 +120,127 @@
 const $ = id => document.getElementById(id);
 const round1 = n => Math.round(n * 10) / 10;
 const BONE_REMAP = { BodyMesh: "TorsoNode" };
+const MODEL_B64 = "eyJtZXRhIjogeyJmb3JtYXRfdmVyc2lvbiI6ICI1LjAiLCAibW9kZWxfZm9ybWF0IjogImJlZHJvY2siLCAiYm94X3V2IjogdHJ1ZX0sICJuYW1lIjogIlNraW5fQ29udmVydGVkX1JpZ2dlZCAoMSkiLCAibW9kZWxfaWRlbnRpZmllciI6ICIiLCAidmlzaWJsZV9ib3giOiBbMSwgMSwgMF0sICJ2YXJpYWJsZV9wbGFjZWhvbGRlcnMiOiAiIiwgIm11bHRpX2ZpbGVfcnVsZXNldCI6ICIiLCAidmFyaWFibGVfcGxhY2Vob2xkZXJfYnV0dG9ucyI6IFtdLCAiYmVkcm9ja19hbmltYXRpb25fbW9kZSI6ICJlbnRpdHkiLCAidGltZWxpbmVfc2V0dXBzIjogW10sICJ1bmhhbmRsZWRfcm9vdF9maWVsZHMiOiB7fSwgInJlc29sdXRpb24iOiB7IndpZHRoIjogNjQsICJoZWlnaHQiOiA2NH0sICJlbGVtZW50cyI6IFt7Im5hbWUiOiAiTGVnUmlnaHRNZXNoIiwgImJveF91diI6IHRydWUsICJyZW5kZXJfb3JkZXIiOiAiZGVmYXVsdCIsICJsb2NrZWQiOiBmYWxzZSwgImV4cG9ydCI6IHRydWUsICJzY29wZSI6IDAsICJhbGxvd19taXJyb3JfbW9kZWxpbmciOiB0cnVlLCAiZnJvbSI6IFstMC4xLCAwLCAtMl0sICJ0byI6IFszLjksIDEyLCAyXSwgImF1dG91diI6IDAsICJjb2xvciI6IDcsICJvcmlnaW4iOiBbMiwgMTAsIDBdLCAidXZfb2Zmc2V0IjogWzAsIDE2XSwgImZhY2VzIjogeyJub3J0aCI6IHsidXYiOiBbNCwgMjAsIDgsIDMyXSwgInRleHR1cmUiOiAwfSwgImVhc3QiOiB7InV2IjogWzAsIDIwLCA0LCAzMl0sICJ0ZXh0dXJlIjogMH0sICJzb3V0aCI6IHsidXYiOiBbMTIsIDIwLCAxNiwgMzJdLCAidGV4dHVyZSI6IDB9LCAid2VzdCI6IHsidXYiOiBbOCwgMjAsIDEyLCAzMl0sICJ0ZXh0dXJlIjogMH0sICJ1cCI6IHsidXYiOiBbOCwgMjAsIDQsIDE2XSwgInRleHR1cmUiOiAwfSwgImRvd24iOiB7InV2IjogWzEyLCAxNiwgOCwgMjBdLCAidGV4dHVyZSI6IDB9fSwgInR5cGUiOiAiY3ViZSIsICJ1dWlkIjogIjA3MzY4MWUwLWIxY2MtMGYzYy1kZDViLTE2NWRmMThhNjRkYiJ9LCB7Im5hbWUiOiAiTGVnTGVmdE1lc2giLCAiYm94X3V2IjogdHJ1ZSwgInJlbmRlcl9vcmRlciI6ICJkZWZhdWx0IiwgImxvY2tlZCI6IGZhbHNlLCAiZXhwb3J0IjogdHJ1ZSwgInNjb3BlIjogMCwgImFsbG93X21pcnJvcl9tb2RlbGluZyI6IHRydWUsICJmcm9tIjogWy0zLjksIDAsIC0yXSwgInRvIjogWzAuMSwgMTIsIDJdLCAiYXV0b3V2IjogMCwgImNvbG9yIjogNywgIm9yaWdpbiI6IFstMiwgMTAsIDBdLCAidXZfb2Zmc2V0IjogWzE2LCA0OF0sICJmYWNlcyI6IHsibm9ydGgiOiB7InV2IjogWzIwLCA1MiwgMjQsIDY0XSwgInRleHR1cmUiOiAwfSwgImVhc3QiOiB7InV2IjogWzE2LCA1MiwgMjAsIDY0XSwgInRleHR1cmUiOiAwfSwgInNvdXRoIjogeyJ1diI6IFsyOCwgNTIsIDMyLCA2NF0sICJ0ZXh0dXJlIjogMH0sICJ3ZXN0IjogeyJ1diI6IFsyNCwgNTIsIDI4LCA2NF0sICJ0ZXh0dXJlIjogMH0sICJ1cCI6IHsidXYiOiBbMjQsIDUyLCAyMCwgNDhdLCAidGV4dHVyZSI6IDB9LCAiZG93biI6IHsidXYiOiBbMjgsIDQ4LCAyNCwgNTJdLCAidGV4dHVyZSI6IDB9fSwgInR5cGUiOiAiY3ViZSIsICJ1dWlkIjogIjRmOTk5Mjc5LThmNWItNmY1Mi01MTc4LTMxYTdmZWY2ZGU3YyJ9LCB7Im5hbWUiOiAiSGVhZE1lc2giLCAiYm94X3V2IjogdHJ1ZSwgInJlbmRlcl9vcmRlciI6ICJkZWZhdWx0IiwgImxvY2tlZCI6IGZhbHNlLCAiZXhwb3J0IjogdHJ1ZSwgInNjb3BlIjogMCwgImFsbG93X21pcnJvcl9tb2RlbGluZyI6IHRydWUsICJmcm9tIjogWy00LCAyNCwgLTRdLCAidG8iOiBbNCwgMzIsIDRdLCAiYXV0b3V2IjogMCwgImNvbG9yIjogNywgIm9yaWdpbiI6IFswLCAyNSwgMF0sICJmYWNlcyI6IHsibm9ydGgiOiB7InV2IjogWzgsIDgsIDE2LCAxNl0sICJ0ZXh0dXJlIjogMH0sICJlYXN0IjogeyJ1diI6IFswLCA4LCA4LCAxNl0sICJ0ZXh0dXJlIjogMH0sICJzb3V0aCI6IHsidXYiOiBbMjQsIDgsIDMyLCAxNl0sICJ0ZXh0dXJlIjogMH0sICJ3ZXN0IjogeyJ1diI6IFsxNiwgOCwgMjQsIDE2XSwgInRleHR1cmUiOiAwfSwgInVwIjogeyJ1diI6IFsxNiwgOCwgOCwgMF0sICJ0ZXh0dXJlIjogMH0sICJkb3duIjogeyJ1diI6IFsyNCwgMCwgMTYsIDhdLCAidGV4dHVyZSI6IDB9fSwgInR5cGUiOiAiY3ViZSIsICJ1dWlkIjogImJkZGI0NjRiLTMxNzgtYzg1Mi02ODhiLTE4MjlhNjk2NTcwYiJ9LCB7Im5hbWUiOiAiQm9keU1lc2giLCAiYm94X3V2IjogdHJ1ZSwgInJlbmRlcl9vcmRlciI6ICJkZWZhdWx0IiwgImxvY2tlZCI6IGZhbHNlLCAiZXhwb3J0IjogdHJ1ZSwgInNjb3BlIjogMCwgImFsbG93X21pcnJvcl9tb2RlbGluZyI6IHRydWUsICJmcm9tIjogWy00LCAxMiwgLTJdLCAidG8iOiBbNCwgMjQsIDJdLCAiYXV0b3V2IjogMCwgImNvbG9yIjogNywgIm9yaWdpbiI6IFswLCAyMCwgMF0sICJ1dl9vZmZzZXQiOiBbMTYsIDE2XSwgImZhY2VzIjogeyJub3J0aCI6IHsidXYiOiBbMjAsIDIwLCAyOCwgMzJdLCAidGV4dHVyZSI6IDB9LCAiZWFzdCI6IHsidXYiOiBbMTYsIDIwLCAyMCwgMzJdLCAidGV4dHVyZSI6IDB9LCAic291dGgiOiB7InV2IjogWzMyLCAyMCwgNDAsIDMyXSwgInRleHR1cmUiOiAwfSwgIndlc3QiOiB7InV2IjogWzI4LCAyMCwgMzIsIDMyXSwgInRleHR1cmUiOiAwfSwgInVwIjogeyJ1diI6IFsyOCwgMjAsIDIwLCAxNl0sICJ0ZXh0dXJlIjogMH0sICJkb3duIjogeyJ1diI6IFszNiwgMTYsIDI4LCAyMF0sICJ0ZXh0dXJlIjogMH19LCAidHlwZSI6ICJjdWJlIiwgInV1aWQiOiAiZDViYWJmYTktYjhjMi04ZGYxLTBmYTctODQ5YWI1NTM5MmFhIn0sIHsibmFtZSI6ICJBcm1SaWdodE1lc2giLCAiYm94X3V2IjogdHJ1ZSwgInJlbmRlcl9vcmRlciI6ICJkZWZhdWx0IiwgImxvY2tlZCI6IGZhbHNlLCAiZXhwb3J0IjogdHJ1ZSwgInNjb3BlIjogMCwgImFsbG93X21pcnJvcl9tb2RlbGluZyI6IHRydWUsICJmcm9tIjogWzQsIDEyLCAtMl0sICJ0byI6IFs4LCAyNCwgMl0sICJhdXRvdXYiOiAwLCAiY29sb3IiOiA3LCAib3JpZ2luIjogWzYsIDIyLCAwXSwgInV2X29mZnNldCI6IFs0MCwgMTZdLCAiZmFjZXMiOiB7Im5vcnRoIjogeyJ1diI6IFs0NCwgMjAsIDQ4LCAzMl0sICJ0ZXh0dXJlIjogMH0sICJlYXN0IjogeyJ1diI6IFs0MCwgMjAsIDQ0LCAzMl0sICJ0ZXh0dXJlIjogMH0sICJzb3V0aCI6IHsidXYiOiBbNTIsIDIwLCA1NiwgMzJdLCAidGV4dHVyZSI6IDB9LCAid2VzdCI6IHsidXYiOiBbNDgsIDIwLCA1MiwgMzJdLCAidGV4dHVyZSI6IDB9LCAidXAiOiB7InV2IjogWzQ4LCAyMCwgNDQsIDE2XSwgInRleHR1cmUiOiAwfSwgImRvd24iOiB7InV2IjogWzUyLCAxNiwgNDgsIDIwXSwgInRleHR1cmUiOiAwfX0sICJ0eXBlIjogImN1YmUiLCAidXVpZCI6ICI5ODRiYTNmZC01MDU1LWE1NWQtMjBhNy1jYmFhNzg1ZDU3ODIifSwgeyJuYW1lIjogIkFybUxlZnRNZXNoIiwgImJveF91diI6IHRydWUsICJyZW5kZXJfb3JkZXIiOiAiZGVmYXVsdCIsICJsb2NrZWQiOiBmYWxzZSwgImV4cG9ydCI6IHRydWUsICJzY29wZSI6IDAsICJhbGxvd19taXJyb3JfbW9kZWxpbmciOiB0cnVlLCAiZnJvbSI6IFstOCwgMTIsIC0yXSwgInRvIjogWy00LCAyNCwgMl0sICJhdXRvdXYiOiAwLCAiY29sb3IiOiA3LCAib3JpZ2luIjogWy02LCAyMiwgMF0sICJ1dl9vZmZzZXQiOiBbMzIsIDQ4XSwgImZhY2VzIjogeyJub3J0aCI6IHsidXYiOiBbMzYsIDUyLCA0MCwgNjRdLCAidGV4dHVyZSI6IDB9LCAiZWFzdCI6IHsidXYiOiBbMzIsIDUyLCAzNiwgNjRdLCAidGV4dHVyZSI6IDB9LCAic291dGgiOiB7InV2IjogWzQ0LCA1MiwgNDgsIDY0XSwgInRleHR1cmUiOiAwfSwgIndlc3QiOiB7InV2IjogWzQwLCA1MiwgNDQsIDY0XSwgInRleHR1cmUiOiAwfSwgInVwIjogeyJ1diI6IFs0MCwgNTIsIDM2LCA0OF0sICJ0ZXh0dXJlIjogMH0sICJkb3duIjogeyJ1diI6IFs0NCwgNDgsIDQwLCA1Ml0sICJ0ZXh0dXJlIjogMH19LCAidHlwZSI6ICJjdWJlIiwgInV1aWQiOiAiZDg1YmRkOGQtNDgwYi1kYTRlLWI2YjktZWY0MjZiYTdkZTcwIn1dLCAiZ3JvdXBzIjogW3sibmFtZSI6ICJIZWFkTWVzaCIsICJ1dWlkIjogImRhNDdhY2YwLWNjZjAtMTEzYS1lYTJkLTBlMTg2YjMzZGM3YyIsICJleHBvcnQiOiB0cnVlLCAibG9ja2VkIjogZmFsc2UsICJzY29wZSI6IDAsICJzZWxlY3RlZCI6IGZhbHNlLCAiX3N0YXRpYyI6IHsicHJvcGVydGllcyI6IHt9LCAidGVtcF9kYXRhIjoge319LCAib3JpZ2luIjogWzAsIDI1LCAwXSwgInJvdGF0aW9uIjogWzAsIDAsIDBdLCAiYmVkcm9ja19iaW5kaW5nIjogIiIsICJjb2xvciI6IDAsICJjaGlsZHJlbiI6IFtdLCAicmVzZXQiOiBmYWxzZSwgInNoYWRlIjogdHJ1ZSwgIm1pcnJvcl91diI6IGZhbHNlLCAidmlzaWJpbGl0eSI6IHRydWUsICJhdXRvdXYiOiAwLCAiaXNPcGVuIjogdHJ1ZSwgInByaW1hcnlfc2VsZWN0ZWQiOiBmYWxzZX0sIHsibmFtZSI6ICJCb2R5TWVzaCIsICJ1dWlkIjogIjUzNzMxYTA2LWVhMjQtZjI4Ny1mMDEyLWNmYmVjMTU0YWRhNyIsICJleHBvcnQiOiB0cnVlLCAibG9ja2VkIjogZmFsc2UsICJzY29wZSI6IDAsICJzZWxlY3RlZCI6IGZhbHNlLCAiX3N0YXRpYyI6IHsicHJvcGVydGllcyI6IHt9LCAidGVtcF9kYXRhIjoge319LCAib3JpZ2luIjogWzAsIDIwLCAwXSwgInJvdGF0aW9uIjogWzAsIDAsIDBdLCAiYmVkcm9ja19iaW5kaW5nIjogIiIsICJjb2xvciI6IDAsICJjaGlsZHJlbiI6IFtdLCAicmVzZXQiOiBmYWxzZSwgInNoYWRlIjogdHJ1ZSwgIm1pcnJvcl91diI6IGZhbHNlLCAidmlzaWJpbGl0eSI6IHRydWUsICJhdXRvdXYiOiAwLCAiaXNPcGVuIjogdHJ1ZSwgInByaW1hcnlfc2VsZWN0ZWQiOiBmYWxzZX0sIHsibmFtZSI6ICJBcm1MZWZ0TWVzaCIsICJ1dWlkIjogImJmNmI4MmJhLTZmMWUtZGNhYS1hNTAwLTdkZmQ1MzFjNmRkYyIsICJleHBvcnQiOiB0cnVlLCAibG9ja2VkIjogZmFsc2UsICJzY29wZSI6IDAsICJzZWxlY3RlZCI6IGZhbHNlLCAiX3N0YXRpYyI6IHsicHJvcGVydGllcyI6IHt9LCAidGVtcF9kYXRhIjoge319LCAib3JpZ2luIjogWy02LCAyMiwgMF0sICJyb3RhdGlvbiI6IFswLCAwLCAwXSwgImJlZHJvY2tfYmluZGluZyI6ICIiLCAiY29sb3IiOiAwLCAiY2hpbGRyZW4iOiBbXSwgInJlc2V0IjogZmFsc2UsICJzaGFkZSI6IHRydWUsICJtaXJyb3JfdXYiOiBmYWxzZSwgInZpc2liaWxpdHkiOiB0cnVlLCAiYXV0b3V2IjogMCwgImlzT3BlbiI6IHRydWUsICJwcmltYXJ5X3NlbGVjdGVkIjogZmFsc2V9LCB7Im5hbWUiOiAiQXJtUmlnaHRNZXNoIiwgInV1aWQiOiAiZjI1N2UyNTItZWM1Zi1lMGIxLTk1MWUtZTEyYTVjMGEyYjYyIiwgImV4cG9ydCI6IHRydWUsICJsb2NrZWQiOiBmYWxzZSwgInNjb3BlIjogMCwgInNlbGVjdGVkIjogZmFsc2UsICJfc3RhdGljIjogeyJwcm9wZXJ0aWVzIjoge30sICJ0ZW1wX2RhdGEiOiB7fX0sICJvcmlnaW4iOiBbNiwgMjIsIDBdLCAicm90YXRpb24iOiBbMCwgMCwgMF0sICJiZWRyb2NrX2JpbmRpbmciOiAiIiwgImNvbG9yIjogMCwgImNoaWxkcmVuIjogW10sICJyZXNldCI6IGZhbHNlLCAic2hhZGUiOiB0cnVlLCAibWlycm9yX3V2IjogZmFsc2UsICJ2aXNpYmlsaXR5IjogdHJ1ZSwgImF1dG91diI6IDAsICJpc09wZW4iOiB0cnVlLCAicHJpbWFyeV9zZWxlY3RlZCI6IGZhbHNlfSwgeyJuYW1lIjogIkxlZ0xlZnRNZXNoIiwgInV1aWQiOiAiNWFmMGJiMDctODk0Zi0wNzNiLWViNTAtNWRlMjY3ZmNhYzVhIiwgImV4cG9ydCI6IHRydWUsICJsb2NrZWQiOiBmYWxzZSwgInNjb3BlIjogMCwgInNlbGVjdGVkIjogZmFsc2UsICJfc3RhdGljIjogeyJwcm9wZXJ0aWVzIjoge30sICJ0ZW1wX2RhdGEiOiB7fX0sICJvcmlnaW4iOiBbLTIsIDEwLCAwXSwgInJvdGF0aW9uIjogWzAsIDAsIDBdLCAiYmVkcm9ja19iaW5kaW5nIjogIiIsICJjb2xvciI6IDAsICJjaGlsZHJlbiI6IFtdLCAicmVzZXQiOiBmYWxzZSwgInNoYWRlIjogdHJ1ZSwgIm1pcnJvcl91diI6IGZhbHNlLCAidmlzaWJpbGl0eSI6IHRydWUsICJhdXRvdXYiOiAwLCAiaXNPcGVuIjogdHJ1ZSwgInByaW1hcnlfc2VsZWN0ZWQiOiBmYWxzZX0sIHsibmFtZSI6ICJMZWdSaWdodE1lc2giLCAidXVpZCI6ICJlZjA1YmY3Yi1iYjRhLTk2MGItZjc3NS04NWY1MGQzZjIzZjMiLCAiZXhwb3J0IjogdHJ1ZSwgImxvY2tlZCI6IGZhbHNlLCAic2NvcGUiOiAwLCAic2VsZWN0ZWQiOiBmYWxzZSwgIl9zdGF0aWMiOiB7InByb3BlcnRpZXMiOiB7fSwgInRlbXBfZGF0YSI6IHt9fSwgIm9yaWdpbiI6IFsyLCAxMCwgMF0sICJyb3RhdGlvbiI6IFswLCAwLCAwXSwgImJlZHJvY2tfYmluZGluZyI6ICIiLCAiY29sb3IiOiAwLCAiY2hpbGRyZW4iOiBbXSwgInJlc2V0IjogZmFsc2UsICJzaGFkZSI6IHRydWUsICJtaXJyb3JfdXYiOiBmYWxzZSwgInZpc2liaWxpdHkiOiB0cnVlLCAiYXV0b3V2IjogMCwgImlzT3BlbiI6IHRydWUsICJwcmltYXJ5X3NlbGVjdGVkIjogdHJ1ZX1dLCAib3V0bGluZXIiOiBbeyJ1dWlkIjogIjUzNzMxYTA2LWVhMjQtZjI4Ny1mMDEyLWNmYmVjMTU0YWRhNyIsICJpc09wZW4iOiB0cnVlLCAiY2hpbGRyZW4iOiBbImQ1YmFiZmE5LWI4YzItOGRmMS0wZmE3LTg0OWFiNTUzOTJhYSIsIHsidXVpZCI6ICJkYTQ3YWNmMC1jY2YwLTExM2EtZWEyZC0wZTE4NmIzM2RjN2MiLCAiaXNPcGVuIjogdHJ1ZSwgImNoaWxkcmVuIjogWyJiZGRiNDY0Yi0zMTc4LWM4NTItNjg4Yi0xODI5YTY5NjU3MGIiXX0sIHsidXVpZCI6ICJiZjZiODJiYS02ZjFlLWRjYWEtYTUwMC03ZGZkNTMxYzZkZGMiLCAiaXNPcGVuIjogdHJ1ZSwgImNoaWxkcmVuIjogWyJkODViZGQ4ZC00ODBiLWRhNGUtYjZiOS1lZjQyNmJhN2RlNzAiXX0sIHsidXVpZCI6ICJmMjU3ZTI1Mi1lYzVmLWUwYjEtOTUxZS1lMTJhNWMwYTJiNjIiLCAiaXNPcGVuIjogdHJ1ZSwgImNoaWxkcmVuIjogWyI5ODRiYTNmZC01MDU1LWE1NWQtMjBhNy1jYmFhNzg1ZDU3ODIiXX1dfSwgeyJ1dWlkIjogIjVhZjBiYjA3LTg5NGYtMDczYi1lYjUwLTVkZTI2N2ZjYWM1YSIsICJpc09wZW4iOiB0cnVlLCAiY2hpbGRyZW4iOiBbIjRmOTk5Mjc5LThmNWItNmY1Mi01MTc4LTMxYTdmZWY2ZGU3YyJdfSwgeyJ1dWlkIjogImVmMDViZjdiLWJiNGEtOTYwYi1mNzc1LTg1ZjUwZDNmMjNmMyIsICJpc09wZW4iOiB0cnVlLCAiY2hpbGRyZW4iOiBbIjA3MzY4MWUwLWIxY2MtMGYzYy1kZDViLTE2NWRmMThhNjRkYiJdfV0sICJ0ZXh0dXJlcyI6IFt7Im5hbWUiOiAibGlnaHRfZ3JheS5wbmciLCAicGF0aCI6ICIiLCAiZm9sZGVyIjogIiIsICJuYW1lc3BhY2UiOiAiIiwgImlkIjogIjAiLCAiZ3JvdXAiOiAiIiwgInNjb3BlIjogMCwgIndpZHRoIjogMSwgImhlaWdodCI6IDEsICJ1dl93aWR0aCI6IDEsICJ1dl9oZWlnaHQiOiAxLCAicGFydGljbGUiOiBmYWxzZSwgInVzZV9hc19kZWZhdWx0IjogZmFsc2UsICJsYXllcnNfZW5hYmxlZCI6IGZhbHNlLCAic3luY190b19wcm9qZWN0IjogIiIsICJmaWxlX2Zvcm1hdCI6ICJwbmciLCAicmVuZGVyX21vZGUiOiAiZGVmYXVsdCIsICJyZW5kZXJfc2lkZXMiOiAiYXV0byIsICJ3cmFwX21vZGUiOiAibGltaXRlZCIsICJwYnJfY2hhbm5lbCI6ICJjb2xvciIsICJmcHMiOiA3LCAiZnJhbWVfdGltZSI6IDEsICJmcmFtZV9vcmRlcl90eXBlIjogImxvb3AiLCAiZnJhbWVfb3JkZXIiOiAiIiwgImZyYW1lX2ludGVycG9sYXRlIjogZmFsc2UsICJ2aXNpYmxlIjogdHJ1ZSwgImludGVybmFsIjogdHJ1ZSwgInNhdmVkIjogdHJ1ZSwgInV1aWQiOiAiYWFhYWFhYWEtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxIiwgInNvdXJjZSI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUFFQUFBQUJDQVlBQUFBZkZjU0pBQUFBRFVsRVFWUjRuR080Y3VYS2Z3QUllQU44OVhiVkxnQUFBQUJKUlU1RXJrSmdnZz09In1dLCAiYW5pbWF0aW9ucyI6IFtdfQ==";
+const README = [
+  "animation tool",
+  "",
+  "files inside",
+  "model to animate is the model you animate in blockbench",
+  "readme is this file",
+  "",
+  "how to use",
+  "1 open blockbench using the open blockbench button on the converter site",
+  "2 in blockbench click file then open model and pick the model to animate file",
+  "3 click the animate tab at the top right",
+  "4 create a new animation and make your keyframes on the bones",
+  "5 keep only one animation in the file because the converter reads the first one",
+  "6 click file then export then export animations and save the json file",
+  "7 open the converter link below",
+  "8 click browse and pick your saved json file or paste its text into the big box",
+  "9 type your entity id in the entity id box",
+  "10 pick playback and interpolation or leave them on auto detect",
+  "11 click convert then click copy",
+  "12 paste the copied line into your bloxd code",
+  "",
+  "converter link",
+  "https://aurabusiness5555-sketch.github.io/aura-c-animation-converter/",
+  "",
+  "notes",
+  "do not rename the bones because bloxd needs the same names",
+  "loop repeats the animation and play once plays it one time and hold on last frame stays on the last pose",
+  "linear moves in a straight line and smooth moves in a curve"
+].join("\r\n");
+
+const CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+
+function crc32(data) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < data.length; i++) c = CRC_TABLE[(c ^ data[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+
+function buildZip(files) {
+  const enc = new TextEncoder();
+  const chunks = [];
+  const central = [];
+  let offset = 0;
+  const now = new Date();
+  const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+  const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+
+  for (const f of files) {
+    const name = enc.encode(f.name);
+    const crc = crc32(f.data);
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, 0x04034b50, true);
+    local.setUint16(4, 20, true);
+    local.setUint16(6, 0x0800, true);
+    local.setUint16(8, 0, true);
+    local.setUint16(10, dosTime, true);
+    local.setUint16(12, dosDate, true);
+    local.setUint32(14, crc, true);
+    local.setUint32(18, f.data.length, true);
+    local.setUint32(22, f.data.length, true);
+    local.setUint16(26, name.length, true);
+    local.setUint16(28, 0, true);
+    chunks.push(new Uint8Array(local.buffer), name, f.data);
+
+    const cd = new DataView(new ArrayBuffer(46));
+    cd.setUint32(0, 0x02014b50, true);
+    cd.setUint16(4, 20, true);
+    cd.setUint16(6, 20, true);
+    cd.setUint16(8, 0x0800, true);
+    cd.setUint16(10, 0, true);
+    cd.setUint16(12, dosTime, true);
+    cd.setUint16(14, dosDate, true);
+    cd.setUint32(16, crc, true);
+    cd.setUint32(20, f.data.length, true);
+    cd.setUint32(24, f.data.length, true);
+    cd.setUint16(28, name.length, true);
+    cd.setUint32(42, offset, true);
+    central.push(new Uint8Array(cd.buffer), name);
+
+    offset += 30 + name.length + f.data.length;
+  }
+
+  let cdSize = 0;
+  for (const c of central) cdSize += c.length;
+
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, files.length, true);
+  end.setUint16(10, files.length, true);
+  end.setUint32(12, cdSize, true);
+  end.setUint32(16, offset, true);
+
+  return new Blob([...chunks, ...central, new Uint8Array(end.buffer)], { type: "application/zip" });
+}
+
+function downloadModel() {
+  const bin = atob(MODEL_B64);
+  const model = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) model[i] = bin.charCodeAt(i);
+  const zip = buildZip([
+    { name: "Model_to_animate.bbmodel", data: model },
+    { name: "readme.txt", data: new TextEncoder().encode(README) }
+  ]);
+  const url = URL.createObjectURL(zip);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Animation Tool.zip";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 function parseInput() {
   try { return JSON.parse($("input").value); }
@@ -185,6 +315,9 @@ function convertAnimation(parsed, loopChoice, lerpChoice) {
   }
   return result;
 }
+
+$("download").addEventListener("click", downloadModel);
+$("openbb").addEventListener("click", () => window.open("https://web.blockbench.net/", "_blank", "noopener"));
 
 $("browse").addEventListener("click", () => $("fileInput").click());
 
