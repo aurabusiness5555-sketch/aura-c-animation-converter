@@ -288,12 +288,10 @@ function convertAnimation(parsed, loopChoice, lerpChoice) {
     anim = parsed.animations[keys[0]];
   }
 
-  if (typeof anim.animation_length !== "number") {
-    throw new Error("Missing animation_length.");
-  }
+  const length = typeof anim.animation_length === "number" ? anim.animation_length : 1;
 
   const result = {
-    animation_length: anim.animation_length,
+    animation_length: length,
     loop: resolveLoop(anim.loop, loopChoice),
     bones: {},
   };
